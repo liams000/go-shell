@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/functions"
 )
 
 func printPrompt() {
@@ -21,20 +23,20 @@ func cleanInput(text string) string {
   return output
 }
 
-func splitInput(text string) []string {
+func splitInput(text string) (string, []string) {
   stringArray := strings.Split(text, " ")
-  return stringArray
+  return stringArray[0], stringArray[1:]
 }
 
-func handleCommand(text []string) {
-  if strings.EqualFold("exit", text[0]) {
-    os.Exit(0)
-  } else if strings.EqualFold("echo", text[0]){
-    text = append(text[:0],text[0+1:]...)
-    reformatted := strings.Join(text," ")
-    fmt.Println(reformatted)
+func handleCommand(command string, args []string) {
+  if strings.EqualFold("exit", command) {
+    functions.HandleExit(args)
+  } else if strings.EqualFold("echo", command){
+    functions.HandleEcho(args)
+  } else if strings.EqualFold("type", command) {
+    functions.HandleType(args)
   } else {
-    printUnknown(text[0])
+    printUnknown(command)
   }
 }
 
@@ -43,8 +45,8 @@ func main() {
   printPrompt()
   for reader.Scan() {
     text := cleanInput(reader.Text())
-    splitText := splitInput(text)
-    handleCommand(splitText)
+    command, args := splitInput(text)
+    handleCommand(command, args)
     printPrompt()
   }
   fmt.Println()
