@@ -12,7 +12,7 @@ func printPrompt() {
 }
 
 func printUnknown(text string) {
-  fmt.Println(text, ": command not found")
+  fmt.Printf("%s: command not found",text)
 }
 
 func cleanInput(text string) string {
@@ -26,7 +26,7 @@ func main() {
   printPrompt()
   for reader.Scan() {
     text := cleanInput(reader.Text())
-    fmt.Println(text,": command not found")
+    printUnknown(text)
     printPrompt()
   }
   fmt.Println()
