@@ -12,7 +12,7 @@ func printPrompt() {
 }
 
 func printUnknown(text string) {
-  fmt.Printf("%s: command not found",text)
+  fmt.Printf("%s: command not found\n",text)
 }
 
 func cleanInput(text string) string {
