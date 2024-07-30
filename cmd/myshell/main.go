@@ -21,11 +21,20 @@ func cleanInput(text string) string {
   return output
 }
 
-func handleCommand(text string) {
-  if strings.EqualFold("exit 0", text) {
+func splitInput(text string) []string {
+  stringArray := strings.Split(text, " ")
+  return stringArray
+}
+
+func handleCommand(text []string) {
+  if strings.EqualFold("exit", text[0]) {
     os.Exit(0)
+  } else if strings.EqualFold("echo", text[0]){
+    text = append(text[:0],text[0+1:]...)
+    reformatted := strings.Join(text," ")
+    fmt.Println(reformatted)
   } else {
-    printUnknown(text)
+    printUnknown(text[0])
   }
 }
 
@@ -34,7 +43,8 @@ func main() {
   printPrompt()
   for reader.Scan() {
     text := cleanInput(reader.Text())
-    handleCommand(text)
+    splitText := splitInput(text)
+    handleCommand(splitText)
     printPrompt()
   }
   fmt.Println()
