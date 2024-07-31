@@ -7,26 +7,8 @@ import (
 	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/functions"
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/utils"
 )
-
-func printPrompt() {
-  fmt.Print("$ ")
-}
-
-func printUnknown(text string) {
-  fmt.Printf("%s: command not found\n",text)
-}
-
-func cleanInput(text string) string {
-  output := strings.TrimSpace(text)
-  output = strings.ToLower(output)
-  return output
-}
-
-func splitInput(text string) (string, []string) {
-  stringArray := strings.Split(text, " ")
-  return stringArray[0], stringArray[1:]
-}
 
 func handleCommand(command string, args []string) {
   if strings.EqualFold("exit", command) {
@@ -36,18 +18,18 @@ func handleCommand(command string, args []string) {
   } else if strings.EqualFold("type", command) {
     functions.HandleType(args)
   } else {
-    printUnknown(command)
+    utils.PrintUnknown(command)
   }
 }
 
 func main() {
   reader := bufio.NewScanner(os.Stdin)
-  printPrompt()
+  utils.PrintPrompt()
   for reader.Scan() {
-    text := cleanInput(reader.Text())
-    command, args := splitInput(text)
+    text := utils.CleanInput(reader.Text())
+    command, args := utils.SplitInput(text)
     handleCommand(command, args)
-    printPrompt()
+    utils.PrintPrompt()
   }
   fmt.Println()
 }

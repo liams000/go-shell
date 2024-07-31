@@ -34,6 +34,15 @@ func HandleType(args []string) {
   if _, exists := builtin[args[0]]; exists {
     fmt.Printf("%s is a shell builtin\n", args[0])
   } else {
+    env := os.Getenv("PATH")
+    paths := strings.Split(env, ":")
+    for _, path := range paths {
+      exec := path + "/" + args[0]
+      if _, err := os.Stat(exec); err == nil {
+        fmt.Fprintf(os.Stdout, "%v is %v\n",args[0], exec)
+        return
+      }
+    }
     fmt.Printf("%s: not found\n", args[0])
   }
 }
