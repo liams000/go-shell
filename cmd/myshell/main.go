@@ -4,11 +4,27 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/functions"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/utils"
 )
+
+func HandleCommand(command string, args []string) {
+  cmd := exec.Command(command, args...)
+
+  output, err := cmd.CombinedOutput()
+
+  if err != nil {
+    utils.PrintUnknown(command)
+    return
+  }
+
+  outputStr := string(output)
+
+  fmt.Print(outputStr)
+}
 
 func handleCommand(command string, args []string) {
   if strings.EqualFold("exit", command) {
@@ -18,7 +34,7 @@ func handleCommand(command string, args []string) {
   } else if strings.EqualFold("type", command) {
     functions.HandleType(args)
   } else {
-    utils.PrintUnknown(command)
+    HandleCommand(command, args)
   }
 }
 
