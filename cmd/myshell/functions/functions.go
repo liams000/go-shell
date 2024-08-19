@@ -1,11 +1,29 @@
 package functions
 
 import (
-  "os"
-  "strconv"
-  "fmt"
-  "strings"
+	"fmt"
+	"os"
+	"os/exec"
+	"strconv"
+	"strings"
+
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/utils"
 )
+
+func HandleCommand(command string, args []string) {
+  cmd := exec.Command(command, args...)
+
+  output, err := cmd.CombinedOutput()
+
+  if err != nil {
+    utils.PrintUnknown(command)
+    return
+  }
+
+  outputStr := string(output)
+
+  fmt.Print(outputStr)
+}
 
 func HandleExit(text []string) {
     if len(text) == 0 {
