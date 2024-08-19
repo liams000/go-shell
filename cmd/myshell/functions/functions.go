@@ -10,6 +10,11 @@ import (
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/utils"
 )
 
+func HandlePwd() {
+  dir, _ := os.Getwd()
+  fmt.Println(dir)
+}
+
 func HandleCommand(command string, args []string) {
   cmd := exec.Command(command, args...)
 
@@ -47,7 +52,7 @@ func HandleType(args []string) {
     return
   }
 
-  builtin := map[string]bool{"echo": true, "exit": true, "type": true}
+  builtin := map[string]bool{"echo": true, "exit": true, "type": true, "pwd": true}
 
   if _, exists := builtin[args[0]]; exists {
     fmt.Printf("%s is a shell builtin\n", args[0])
