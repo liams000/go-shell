@@ -10,6 +10,13 @@ import (
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/utils"
 )
 
+func HandleCd(args []string) {
+  command := args[0]
+  if err := os.Chdir(command); err != nil {
+    fmt.Fprintf(os.Stdout, "%s: No such file or directory\n", command)
+  }
+}
+
 func HandlePwd() {
   dir, _ := os.Getwd()
   fmt.Println(dir)

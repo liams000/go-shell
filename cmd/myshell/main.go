@@ -19,6 +19,8 @@ func handleCommand(command string, args []string) {
     functions.HandleType(args)
   } else if strings.EqualFold("pwd", command) {
     functions.HandlePwd()
+  } else if strings.EqualFold("cd", command) {
+    functions.HandleCd(args)
   } else {
     functions.HandleCommand(command, args)
   }
