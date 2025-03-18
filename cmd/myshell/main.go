@@ -3,37 +3,42 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"os"
-	"strings"
-
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/functions"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/utils"
+	"os"
 )
 
+var commands = map[string]func([]string){
+	"exit": functions.HandleExit,
+	"echo": functions.HandleEcho,
+	"type": functions.HandleType,
+	"pwd":  functions.HandlePwd,
+	"cd":   functions.HandleCd,
+}
+
 func handleCommand(command string, args []string) {
-  if strings.EqualFold("exit", command) {
-    functions.HandleExit(args)
-  } else if strings.EqualFold("echo", command){
-    functions.HandleEcho(args)
-  } else if strings.EqualFold("type", command) {
-    functions.HandleType(args)
-  } else if strings.EqualFold("pwd", command) {
-    functions.HandlePwd()
-  } else if strings.EqualFold("cd", command) {
-    functions.HandleCd(args)
-  } else {
-    functions.HandleCommand(command, args)
-  }
+	if callback, exists := commands[command]; exists {
+		callback(args)
+		return
+	}
+
+	// Fallback function if none is found
+	functions.HandleCommand(command, args)
 }
 
 func main() {
-  reader := bufio.NewScanner(os.Stdin)
-  utils.PrintPrompt()
-  for reader.Scan() {
-    text := utils.CleanInput(reader.Text())
-    command, args := utils.SplitInput(text)
-    handleCommand(command, args)
-    utils.PrintPrompt()
-  }
-  fmt.Println()
+	// initialises a reader for use to read inputs from the cli
+	reader := bufio.NewScanner(os.Stdin)
+	// print a $
+	utils.PrintPrompt()
+	for reader.Scan() {
+		// this cleans up any excess spaces in the input
+		text := utils.CleanInput(reader.Text())
+		// split the input into pieces we can ref where the 0 index is the command all the time
+		command, args := utils.SplitInput(text)
+		// self-explanatory
+		handleCommand(command, args)
+		utils.PrintPrompt()
+	}
+	fmt.Println()
 }

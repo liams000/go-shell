@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func HandlePwd() {
+func HandlePwd(args []string) {
 	dir, _ := os.Getwd()
 	fmt.Println(dir)
 }

@@ -7,5 +7,6 @@ import (
 
 func HandleEcho(text []string) {
 	reformatted := strings.Join(text, " ")
+	reformatted = strings.ReplaceAll(reformatted, "'", "")
 	fmt.Println(reformatted)
 }
